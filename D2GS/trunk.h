@@ -2,14 +2,12 @@
 #define INCLUDED_TRUNK_H
 
 #define MaxClient 4096
-#define RecvBufferSize 4096
+#define RecvBufferSize 8192
 #define SendBufferSize 8192
 #define HashTableSize 524288
-#define ConcurrentNum 2
+#define ConcurrentNum 4
 #define MERGE_PACKET 1
 #define ENABLE_HSAUTH 0
-
-#include "d2gamelist.h"
 
 typedef struct
 {
@@ -36,8 +34,8 @@ typedef struct
 	SOCKET Peer;
 	char SendState;
 	WSABUF RecvBuffer;
-	char* SendQueue;
-	char* SendBuf;
+	WSABUF SendBuffer;
+	WSABUF SendQueue;
 	int QueuePos;
 	IOCPOverlapped RecvEvent;
 	IOCPOverlapped SendEvent;
@@ -58,8 +56,7 @@ typedef struct
 	int RequestRate;
 	int RemoteAddr;
 	CRITICAL_SECTION Lock;
-	D2CHARINFO *Player;
-	time_t LastActive;
+	int RouteTimer;
 } IOCPClient;
 
 typedef struct
